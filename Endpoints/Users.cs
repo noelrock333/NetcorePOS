@@ -1,4 +1,7 @@
 using System.Collections.ObjectModel;
+using System.Security.Principal;
+using Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Models;
 
 public static class Collections {
@@ -25,18 +28,21 @@ public static class Collections {
 }
 
 public static class Users {
-  public static void RegisterUserEndpoints(this IEndpointRouteBuilder routes) {
+  public static void RegisterUserEndpoints(this IEndpointRouteBuilder routes, IConfiguration configuration) {
     var users = routes.MapGroup("/api/v1/users");
 
     users.MapGet("", () => Collections.Users);
 
-    users.MapGet("{id}", (int id) => {
+    users.MapGet("{id}", (HttpContext httpContext, int id) => {
+      // var token = AuthHelper.GetTokenFromHeader(httpContext);
+      // var authenticatedUser = new AuthHelper(configuration).DecodeJWTToken(token);
+      // Console.WriteLine("authenticatedUser", authenticatedUser);
       var user = Collections.Users.FirstOrDefault(item => item.Id == id);
       if (user == null) {
         return Results.NotFound();
       }
       return Results.Ok(user);
-    });
+    }).RequireAuthorization();
 
     users.MapPost("", (User user) => {
       Collections.Users.Add(user);
