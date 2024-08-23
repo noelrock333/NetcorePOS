@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/noel/projects/NetcorePOS/NetcorePOS.csproj": {}
+    "/Users/mike/NetcorePOS/NetcorePOS.csproj": {}
   },
   "projects": {
-    "/Users/noel/projects/NetcorePOS/NetcorePOS.csproj": {
+    "/Users/mike/NetcorePOS/NetcorePOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/noel/projects/NetcorePOS/NetcorePOS.csproj",
+        "projectUniqueName": "/Users/mike/NetcorePOS/NetcorePOS.csproj",
         "projectName": "NetcorePOS",
-        "projectPath": "/Users/noel/projects/NetcorePOS/NetcorePOS.csproj",
-        "packagesPath": "/Users/noel/.nuget/packages/",
-        "outputPath": "/Users/noel/projects/NetcorePOS/obj/",
+        "projectPath": "/Users/mike/NetcorePOS/NetcorePOS.csproj",
+        "packagesPath": "/Users/mike/.nuget/packages/",
+        "outputPath": "/Users/mike/NetcorePOS/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/noel/.nuget/NuGet/NuGet.Config"
+          "/Users/mike/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
