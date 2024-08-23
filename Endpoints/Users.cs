@@ -1,11 +1,5 @@
 using System.Collections.ObjectModel;
-
-public class User {
-  public int Id { get; set;}
-  public string FirstName { get; set; }
-  public string LastName { get; set;}
-  public DateOnly BirthDate { get; set; }
-}
+using Models;
 
 public static class Collections {
   public static List<User> Users = new List<User>() {
