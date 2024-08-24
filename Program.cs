@@ -1,4 +1,5 @@
 using System.Text;
+using Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,8 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+builder.Services.AddScoped<IAuthHelper,AuthHelper>();
 
 var jwtSecret = configuration["ApplicationSettings:JWT_Secret"];
 if (string.IsNullOrEmpty(jwtSecret)) {
@@ -69,7 +72,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // configuration is injected into the RegisterAuthorizationEndpoints method
-app.RegisterAuthorizationEndpoints(configuration);
+app.RegisterAuthorizationEndpoints();
 app.RegisterUserEndpoints(configuration);
 app.RegisterProductsEndpoints();
 app.RegisterCustomersEndpoint();
