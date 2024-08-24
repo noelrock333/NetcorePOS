@@ -21,7 +21,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddScoped<IAuthHelper,AuthHelper>();
+builder.Services.AddScoped<AuthHelper>();
+
+// builder.Services.AddScoped<IAuthHelper,AuthHelper>();
 
 var jwtSecret = configuration["ApplicationSettings:JWT_Secret"];
 if (string.IsNullOrEmpty(jwtSecret)) {
@@ -73,7 +75,7 @@ app.UseAuthorization();
 
 // configuration is injected into the RegisterAuthorizationEndpoints method
 app.RegisterAuthorizationEndpoints();
-app.RegisterUserEndpoints(configuration);
+app.RegisterUserEndpoints();
 app.RegisterProductsEndpoints();
 app.RegisterCustomersEndpoint();
 

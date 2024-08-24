@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Models;
@@ -50,19 +51,38 @@ namespace Helpers {
       };
 
       try {
+        Console.WriteLine("Try");
         var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
         return principal;
       } catch (Exception ex) {
+        Console.WriteLine("Catch");
         throw new SecurityTokenException("Invalid token", ex);
       }
     }
 
-    public static string GetTokenFromHeader(HttpContext httpContext) {
+    public string GetTokenFromHeader(HttpContext httpContext) {
       if (httpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader)) {
         var token = authorizationHeader.ToString().Split(" ").Last();
         return token;
       }
       return null;
+    }
+
+    public string HashPassword(string password)
+    {
+        using (SHA1 sha1 = SHA1.Create())
+        {
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+            byte[] hashBytes = sha1.ComputeHash(passwordBytes);
+
+            StringBuilder hashStringBuilder = new StringBuilder();
+            foreach (byte b in hashBytes)
+            {
+                hashStringBuilder.Append(b.ToString("x2"));
+            }
+
+            return hashStringBuilder.ToString();
+        }
     }
   }
 }

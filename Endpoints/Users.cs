@@ -28,20 +28,22 @@ public static class Collections {
 }
 
 public static class Users {
-  public static void RegisterUserEndpoints(this IEndpointRouteBuilder routes, IConfiguration configuration) {
+  public static void RegisterUserEndpoints(this IEndpointRouteBuilder routes) {
     var users = routes.MapGroup("/api/v1/users");
 
     users.MapGet("", () => Collections.Users);
 
-    users.MapGet("{id}", (HttpContext httpContext, int id) => {
-      // var token = AuthHelper.GetTokenFromHeader(httpContext);
-      // var authenticatedUser = new AuthHelper(configuration).DecodeJWTToken(token);
-      // Console.WriteLine("authenticatedUser", authenticatedUser);
+    users.MapGet("{id}", (HttpContext httpContext, int id, AuthHelper auth) => {
+      var token = auth.GetTokenFromHeader(httpContext);
+      var authenticatedUser = auth.DecodeJWTToken(token);
+      Console.WriteLine(token);
+      Console.WriteLine("authenticatedUser", authenticatedUser);
       var user = Collections.Users.FirstOrDefault(item => item.Id == id);
       if (user == null) {
         return Results.NotFound();
       }
-      return Results.Ok(user);
+      return Results.Ok(new { user });
+      // return Results.Ok(new { authenticatedUser });
     }).RequireAuthorization();
 
     users.MapPost("", (User user) => {
