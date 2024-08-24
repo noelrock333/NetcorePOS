@@ -5,13 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Models;
 
 namespace Helpers {
-  public class AuthHelper {
-    private readonly IConfiguration _configuration;
-
-    public AuthHelper(IConfiguration configuration) {
-      _configuration = configuration;
-    }
-    
+  public class AuthHelper(IConfiguration configuration) : IAuthHelper {
     public string GenerateJWTToken(SystemUser user) {
       // We could add more params on the claims, that information will be added to the JWT token
       var claims = new List<Claim> {
@@ -20,7 +14,7 @@ namespace Helpers {
           new Claim(ClaimTypes.Role, user.Role),
       };
 
-      var jwtSecret = _configuration["ApplicationSettings:JWT_Secret"];
+      var jwtSecret = configuration["ApplicationSettings:JWT_Secret"];
       if (string.IsNullOrEmpty(jwtSecret)) {
         throw new ArgumentNullException("JWT_Secret", "JWT_Secret is not configured in the application settings.");
       }
@@ -39,7 +33,7 @@ namespace Helpers {
     }
 
     public ClaimsPrincipal DecodeJWTToken(string token) {
-      var jwtSecret = _configuration["ApplicationSettings:JWT_Secret"];
+      var jwtSecret = configuration["ApplicationSettings:JWT_Secret"];
       if (string.IsNullOrEmpty(jwtSecret)) {
         throw new ArgumentNullException("JWT_Secret", "JWT_Secret is not configured in the application settings.");
       }
@@ -63,12 +57,12 @@ namespace Helpers {
       }
     }
 
-  public static string GetTokenFromHeader(HttpContext httpContext) {
-    if (httpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader)) {
-      var token = authorizationHeader.ToString().Split(" ").Last();
-      return token;
+    public static string GetTokenFromHeader(HttpContext httpContext) {
+      if (httpContext.Request.Headers.TryGetValue("Authorization", out var authorizationHeader)) {
+        var token = authorizationHeader.ToString().Split(" ").Last();
+        return token;
+      }
+      return null;
     }
-    return null;
-  }
   }
 }
